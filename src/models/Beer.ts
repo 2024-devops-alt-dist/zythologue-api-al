@@ -1,5 +1,5 @@
 export interface Beer {
-    id: number;
+    id?: number;
     breweryId: number;
     categoryId: number;
     name: string;
