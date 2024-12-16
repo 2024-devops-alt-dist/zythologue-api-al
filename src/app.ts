@@ -3,6 +3,9 @@ import dotenv from 'dotenv';
 dotenv.config()
 
 import { connectDB, db } from './config/dbConfig';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocs from './config/swaggerConfig'; // Importation de la configuration Swagger
+
 import beerRoutes from './routes/beerRoutes';
 
 const app: Application = express();
@@ -10,6 +13,7 @@ const port = process.env.SERVER_PORT;
 
 app.use(express.json());
 
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/api', beerRoutes);
 
 connectDB()
