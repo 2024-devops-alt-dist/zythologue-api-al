@@ -1,23 +1,23 @@
 import { Request, Response } from "express";
-import { BeerService } from "../services/beerService";
+import { BreweryService } from "../services/breweryService";
 
-const beerService = new BeerService;
+const breweryService = new BreweryService
 
-export class BeerController {
+export class BreweryController {
 
-    public getBeers = async (req: Request, res: Response) => {
+    public getBreweries = async (req: Request, res: Response) => {
         try {
-            const result = await beerService.findAll();
+            const result = await breweryService.findAll();
             res.status(200).json(result.rows);
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });
         }
     };
 
-    public getBeerById = async (req: Request, res: Response) => {
+    public getBreweryById = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const result = await beerService.findOne(id);        
+            const result = await breweryService.findOne(id);        
             if(result.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
@@ -28,17 +28,17 @@ export class BeerController {
         }
     }
 
-    public createBeer = async (req: Request, res: Response) => {
+    public createBrewery = async (req: Request, res: Response) => {
         try {
-            const beer = {
-                breweryId: req.body.brewery_id,
-                categoryId: req.body.category_id,
+            const brewery = {
                 name: req.body.name,
+                address: req.body.address,
+                country: req.body.country,
                 description: req.body.description,
-                abv: req.body.abv,
-                ibu: req.body.ibu
+                link: req.body.link,
+                email: req.body.email
             }
-            const result = await beerService.create(beer);            
+            const result = await breweryService.create(brewery);            
             if(result.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
@@ -49,41 +49,33 @@ export class BeerController {
         }
     }
 
-    public updateBeer = async (req: Request, res: Response) => {
+    public updateBrewery = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
             const property = req.body.property;
             const value = req.body.value;
             const allowedProperties = [
-                'brewery_id', 
-                'category_id', 
                 'name', 
+                'address', 
+                'country', 
                 'description', 
-                'abv', 
-                'ibu'
+                'link', 
+                'email'
             ];
-            const stringProperties = [
-                'name', 
-                'description', 
-            ]
             if(!allowedProperties.includes(property)) {
                 res.status(400).json({ status: 400, error: "Bad Request", message: "Not allowed property." });
                 return;
             }
-            if(stringProperties.includes(property) && typeof value !== "string") {
+            if(typeof value !== "string") {
                 res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a string." });
                 return;
             }
-            if(!stringProperties.includes(property) && typeof value !== "number") {
-                res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a number." });
-                return;
-            }
-            const updatedBeer = await beerService.findOne(id);
+            const updatedBeer = await breweryService.findOne(id);
             if(updatedBeer.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
             }
-            const result = await beerService.update(id, property, value);
+            const result = await breweryService.update(id, property, value);
             
             res.status(200).json(result.rows[0]);
         } catch (error) {
@@ -91,15 +83,15 @@ export class BeerController {
         }
     }
 
-    public deleteBeer = async (req: Request, res: Response) => {
+    public deleteBrewery = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const beer = await beerService.findOne(id);
+            const beer = await breweryService.findOne(id);
             if(beer.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
             }
-            await beerService.delete(id); 
+            await breweryService.delete(id); 
             res.status(204).json();
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });

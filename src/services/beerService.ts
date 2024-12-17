@@ -1,16 +1,6 @@
 import { Beer } from "../models/Beer";
 import { db } from "../config/dbConfig";
 
-let beer: Beer = {
-    id: 1, 
-    breweryId: 1, 
-    categoryId: 1,
-    name: 'test',
-    description: 'test',
-    abv: 5.2,
-    ibu: 20
-};
-
 export class BeerService {
 
     public findAll(): Promise<Beer[] | any> {
