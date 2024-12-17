@@ -10,6 +10,7 @@ import beerRoutes from './routes/beerRoutes';
 import breweryRoutes from './routes/breweryRoutes';
 import userRoutes from './routes/userRoutes';
 import categoryRoutes from './routes/categoryRoutes';
+import ingredientRoutes from './routes/ingredientRoutes';
 
 const app: Application = express();
 const port = process.env.SERVER_PORT;
@@ -21,6 +22,7 @@ app.use('/api', beerRoutes);
 app.use('/api', breweryRoutes);
 app.use('/api', userRoutes);
 app.use('/api', categoryRoutes);
+app.use('/api', ingredientRoutes);
 
 connectDB()
     .then(() => {
