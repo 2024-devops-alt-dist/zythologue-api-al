@@ -8,6 +8,7 @@ import swaggerDocs from './config/swaggerConfig'; // Importation de la configura
 
 import beerRoutes from './routes/beerRoutes';
 import breweryRoutes from './routes/breweryRoutes';
+import userRoutes from './routes/userRoutes';
 
 const app: Application = express();
 const port = process.env.SERVER_PORT;
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/api', beerRoutes);
 app.use('/api', breweryRoutes);
+app.use('/api', userRoutes)
 
 connectDB()
     .then(() => {
