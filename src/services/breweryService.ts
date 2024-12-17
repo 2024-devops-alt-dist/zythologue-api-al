@@ -14,7 +14,7 @@ export class BreweryService {
     }
 
     public create(brewery: Brewery): Promise<Brewery | any> {
-        const query = 'INSERT INTO brewery (brewery_id, name, address, country, description, link, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *'
+        const query = 'INSERT INTO brewery (name, address, country, description, link, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *'
         return db.query(query, [
             brewery.name,
             brewery.address,
