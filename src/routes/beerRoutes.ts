@@ -172,13 +172,17 @@ router.post('/beers', beerController.createBeer);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               property: string
- *               value: string | number
- *             example:
- *               property: "name"
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 property: string
+ *                 value: any
+ *           example:
+ *             - property: "name"
  *               value: "Duvel"
+ *             - property: "abv"
+ *               value: 10
  *     responses:
  *       200:
  *         description: Beer is updated.

@@ -173,13 +173,17 @@ router.post('/breweries', breweryController.createBrewery);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               property: string
- *               value: string | number
- *             example:
- *               property: "name"
- *               value: "Duvel"
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 property: string
+ *                 value: any
+ *           example:
+ *             - property: "name"
+ *               value: "Brasserie Dupont"
+ *             - property: "country"
+ *               value: "Belgique"
  *     responses:
  *       200:
  *         description: Brewery is updated.

@@ -52,8 +52,12 @@ export class BreweryController {
     public updateBrewery = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const property = req.body.property;
-            const value = req.body.value;
+            const beer = await breweryService.findOne(id);
+            if(beer.rowCount === 0) {
+                res.status(404).json({ status: 404, error: "Not Found" });
+                return;
+            }
+            const data = req.body;
             const allowedProperties = [
                 'name', 
                 'address', 
@@ -62,21 +66,21 @@ export class BreweryController {
                 'link', 
                 'email'
             ];
-            if(!allowedProperties.includes(property)) {
-                res.status(400).json({ status: 400, error: "Bad Request", message: "Not allowed property." });
-                return;
+            for (let i = 0; i < data.length; i++) {
+                const element = data[i];
+                const property = element.property;
+                const value = element.value;
+                if(!allowedProperties.includes(property)) {
+                    res.status(400).json({ status: 400, error: "Bad Request", message: "Not allowed property." });
+                    return;
+                }
+                if(typeof value !== "string") {
+                    res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a string." });
+                    return;
+                }
+                const update = await breweryService.update(id, property, value);
             }
-            if(typeof value !== "string") {
-                res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a string." });
-                return;
-            }
-            const updatedBeer = await breweryService.findOne(id);
-            if(updatedBeer.rowCount === 0) {
-                res.status(404).json({ status: 404, error: "Not Found" });
-                return;
-            }
-            const result = await breweryService.update(id, property, value);
-            
+            const result = await breweryService.findOne(id);
             res.status(200).json(result.rows[0]);
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });
