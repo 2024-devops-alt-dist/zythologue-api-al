@@ -20,3 +20,7 @@ Exécuter la commande suivante pour créer et lancer les conteneurs de la base d
 ```
 $ docker compose up --build
 ```
+
+## Documentation 
+
+La documentation de l'API est disponible sur la route /api/docs.
