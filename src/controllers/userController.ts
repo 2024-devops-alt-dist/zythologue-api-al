@@ -1,23 +1,24 @@
 import { Request, Response } from "express";
-import { BeerService } from "../services/beerService";
+import { UserService } from "../services/userService";
+import bcrypt from "bcrypt";
 
-const beerService = new BeerService;
+const userService = new UserService;
 
-export class BeerController {
+export class UserController {
 
-    public getBeers = async (req: Request, res: Response) => {
+    public getUsers = async (req: Request, res: Response) => {
         try {
-            const result = await beerService.findAll();
+            const result = await userService.findAll();
             res.status(200).json(result.rows);
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });
         }
     };
 
-    public getBeerById = async (req: Request, res: Response) => {
+    public getUserById = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const result = await beerService.findOne(id);        
+            const result = await userService.findOne(id);        
             if(result.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
@@ -28,17 +29,16 @@ export class BeerController {
         }
     }
 
-    public createBeer = async (req: Request, res: Response) => {
+    public createUser = async (req: Request, res: Response) => {
         try {
-            const beer = {
-                breweryId: req.body.brewery_id,
-                categoryId: req.body.category_id,
-                name: req.body.name,
-                description: req.body.description,
-                abv: req.body.abv,
-                ibu: req.body.ibu
+            const user = {
+                email: req.body.email,
+                password: await bcrypt.hash(req.body.password, 10),
+                username: req.body.username,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
             }
-            const result = await beerService.create(beer);            
+            const result = await userService.create(user);            
             if(result.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
@@ -49,62 +49,56 @@ export class BeerController {
         }
     }
 
-    public updateBeer = async (req: Request, res: Response) => {
+    public updateUser = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const beer = await beerService.findOne(id);
-            if(beer.rowCount === 0) {
+            const user = await userService.findOne(id);
+            if(user.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
             }
             const data = req.body;
             const allowedProperties = [
-                'brewery_id', 
-                'category_id', 
-                'name', 
-                'description', 
-                'abv', 
-                'ibu'
-            ];
-            const stringProperties = [
-                'name', 
-                'description', 
+                'email', 
+                'password', 
+                'username', 
+                'firstname', 
+                'lastname', 
             ];
 
             for (let i = 0; i < data.length; i++) {
                 const element = data[i];
                 const property = element.property;
-                const value = element.value;
+                let value = element.value;
+                if(property === "password") {
+                    value = await bcrypt.hash(value, 10);
+                }
                 if(!allowedProperties.includes(property)) {
                     res.status(400).json({ status: 400, error: "Bad Request", message: "Not allowed property." });
                     return;
                 }
-                if(stringProperties.includes(property) && typeof value !== "string") {
+                if(typeof value !== "string") {
                     res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a string." });
                     return;
                 }
-                if(!stringProperties.includes(property) && typeof value !== "number") {
-                    res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a number." });
-                    return;
-                }
-                const update = await beerService.update(id, property, value);
+                const update = await userService.update(id, property, value);
             }
-            const result = await beerService.findOne(id);
+            const result = await userService.findOne(id);
             res.status(200).json(result.rows[0]);
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });
         }
     }
 
-    public deleteBeer = async (req: Request, res: Response) => {
+    public deleteUser = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const beer = await beerService.findOne(id);
-            if(beer.rowCount === 0) {
+            const User = await userService.findOne(id);
+            if(User.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
             }
-            await beerService.delete(id); 
+            await userService.delete(id); 
             res.status(204).json();
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });

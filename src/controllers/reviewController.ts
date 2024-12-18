@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
-import { BeerService } from "../services/beerService";
+import { ReviewService } from "../services/reviewService";
 
-const beerService = new BeerService;
+const reviewService = new ReviewService;
 
-export class BeerController {
+export class ReviewController {
 
-    public getBeers = async (req: Request, res: Response) => {
+    public getReviews = async (req: Request, res: Response) => {
         try {
-            const result = await beerService.findAll();
+            const result = await reviewService.findAll();
             res.status(200).json(result.rows);
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });
@@ -17,7 +17,7 @@ export class BeerController {
     public getBeerById = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const result = await beerService.findOne(id);        
+            const result = await reviewService.findOne(id);        
             if(result.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
@@ -28,17 +28,16 @@ export class BeerController {
         }
     }
 
-    public createBeer = async (req: Request, res: Response) => {
+    public createReview = async (req: Request, res: Response) => {
         try {
-            const beer = {
-                breweryId: req.body.brewery_id,
-                categoryId: req.body.category_id,
-                name: req.body.name,
-                description: req.body.description,
-                abv: req.body.abv,
-                ibu: req.body.ibu
+            const review = {
+                userId: req.body.user_id,
+                beerId: req.body.beer_id,
+                rate: req.body.rate,
+                comment: req.body.comment,
+                createdAt: req.body.created_at,
             }
-            const result = await beerService.create(beer);            
+            const result = await reviewService.create(review);            
             if(result.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
@@ -49,27 +48,30 @@ export class BeerController {
         }
     }
 
-    public updateBeer = async (req: Request, res: Response) => {
+    public updateReview = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const beer = await beerService.findOne(id);
-            if(beer.rowCount === 0) {
+            const review = await reviewService.findOne(id);
+            if(review.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
             }
             const data = req.body;
             const allowedProperties = [
-                'brewery_id', 
-                'category_id', 
-                'name', 
-                'description', 
-                'abv', 
-                'ibu'
+                'user_id', 
+                'beer_id', 
+                'rate', 
+                'comment', 
+                'created_at', 
             ];
             const stringProperties = [
-                'name', 
-                'description', 
+                'comment'
             ];
+            const numberProperties = [
+                'user_id',
+                'beer_id',
+                'rate'
+            ]
 
             for (let i = 0; i < data.length; i++) {
                 const element = data[i];
@@ -83,28 +85,32 @@ export class BeerController {
                     res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a string." });
                     return;
                 }
-                if(!stringProperties.includes(property) && typeof value !== "number") {
+                if(numberProperties.includes(property) && typeof value !== "number") {
                     res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a number." });
                     return;
                 }
-                const update = await beerService.update(id, property, value);
+                if(property === "created_at" && value !instanceof Date) {
+                    res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a date." });
+                    return;
+                }
+                const update = await reviewService.update(id, property, value);
             }
-            const result = await beerService.findOne(id);
+            const result = await reviewService.findOne(id);
             res.status(200).json(result.rows[0]);
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });
         }
     }
 
-    public deleteBeer = async (req: Request, res: Response) => {
+    public deleteReview = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const beer = await beerService.findOne(id);
-            if(beer.rowCount === 0) {
+            const review = await reviewService.findOne(id);
+            if(review.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
             }
-            await beerService.delete(id); 
+            await reviewService.delete(id); 
             res.status(204).json();
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });

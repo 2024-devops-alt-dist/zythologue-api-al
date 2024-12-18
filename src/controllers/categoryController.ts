@@ -1,23 +1,23 @@
 import { Request, Response } from "express";
-import { BeerService } from "../services/beerService";
+import { CategoryService } from "../services/categoryService";
 
-const beerService = new BeerService;
+const categoryService = new CategoryService;
 
-export class BeerController {
+export class CategoryController {
 
-    public getBeers = async (req: Request, res: Response) => {
+    public getCategories = async (req: Request, res: Response) => {
         try {
-            const result = await beerService.findAll();
+            const result = await categoryService.findAll();
             res.status(200).json(result.rows);
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });
         }
     };
 
-    public getBeerById = async (req: Request, res: Response) => {
+    public getCategoryById = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const result = await beerService.findOne(id);        
+            const result = await categoryService.findOne(id);        
             if(result.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
@@ -28,17 +28,13 @@ export class BeerController {
         }
     }
 
-    public createBeer = async (req: Request, res: Response) => {
+    public createCategory = async (req: Request, res: Response) => {
         try {
-            const beer = {
-                breweryId: req.body.brewery_id,
-                categoryId: req.body.category_id,
+            const category = {
                 name: req.body.name,
                 description: req.body.description,
-                abv: req.body.abv,
-                ibu: req.body.ibu
             }
-            const result = await beerService.create(beer);            
+            const result = await categoryService.create(category);            
             if(result.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
@@ -49,24 +45,16 @@ export class BeerController {
         }
     }
 
-    public updateBeer = async (req: Request, res: Response) => {
+    public updateCategory = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const beer = await beerService.findOne(id);
-            if(beer.rowCount === 0) {
+            const category = await categoryService.findOne(id);
+            if(category.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
             }
             const data = req.body;
             const allowedProperties = [
-                'brewery_id', 
-                'category_id', 
-                'name', 
-                'description', 
-                'abv', 
-                'ibu'
-            ];
-            const stringProperties = [
                 'name', 
                 'description', 
             ];
@@ -79,32 +67,28 @@ export class BeerController {
                     res.status(400).json({ status: 400, error: "Bad Request", message: "Not allowed property." });
                     return;
                 }
-                if(stringProperties.includes(property) && typeof value !== "string") {
+                if(typeof value !== "string") {
                     res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a string." });
                     return;
                 }
-                if(!stringProperties.includes(property) && typeof value !== "number") {
-                    res.status(400).json({ status: 400, error: "Bad Request", message: "This property value must be a number." });
-                    return;
-                }
-                const update = await beerService.update(id, property, value);
+                const update = await categoryService.update(id, property, value);
             }
-            const result = await beerService.findOne(id);
+            const result = await categoryService.findOne(id);
             res.status(200).json(result.rows[0]);
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });
         }
     }
 
-    public deleteBeer = async (req: Request, res: Response) => {
+    public deleteCategory = async (req: Request, res: Response) => {
         try {
             const id = parseInt(req.params.id, 10);
-            const beer = await beerService.findOne(id);
-            if(beer.rowCount === 0) {
+            const Category = await categoryService.findOne(id);
+            if(Category.rowCount === 0) {
                 res.status(404).json({ status: 404, error: "Not Found" });
                 return;
             }
-            await beerService.delete(id); 
+            await categoryService.delete(id); 
             res.status(204).json();
         } catch (error) {
             res.status(500).json({ status: 500, error: "Internal Server Error" });
