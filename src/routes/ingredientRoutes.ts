@@ -75,7 +75,7 @@ router.get('/ingredients/:id', ingredientController.getIngredientById);
  * /api/ingredients:
  *   post:
  *     tags:
- *       - ingredients
+ *       - Ingredients
  *     summary: Create ingredient.
  *     description: Create a ingredient and retrieve it in response body.
  *     requestBody:
