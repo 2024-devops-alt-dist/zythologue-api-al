@@ -14,9 +14,22 @@ Cloner le projet:
 $ git clone https://github.com/2024-devops-alt-dist/zythologue-api-al.git
 ```
 
-Créer un fichier .env à la racine du projet basé sur le fichier .env.template, puis ajouter les valeurs aux variables d'environnement en fonction de votre configuration.
+* Installer les dépendances en locale (optionnel):
+```
+npm install
+```
 
-Exécuter la commande suivante pour créer et lancer les conteneurs de la base de données et de l'API nodeJs:
+* Créer un fichier .env à la racine du projet basé sur le fichier .env.template, puis ajouter les valeurs aux variables d'environnement :
+```
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=zythologue-db
+DB_USER=admin
+DB_PASSWORD=admin
+SERVER_PORT=3000
+```
+
+* Exécuter la commande suivante pour créer et lancer les conteneurs de la base de données et de l'API nodeJs:
 ```
 $ docker compose up --build
 ```
