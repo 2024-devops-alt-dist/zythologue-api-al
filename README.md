@@ -22,11 +22,11 @@ npm install
 * Créer un fichier .env à la racine du projet basé sur le fichier .env.template, puis ajouter les valeurs aux variables d'environnement :
 ```
 DB_HOST=db
-DB_PORT=5432
-DB_NAME=zythologue-db
-DB_USER=admin
-DB_PASSWORD=admin
-SERVER_PORT=3000
+DB_PORT=port de la base de données
+DB_NAME=nom de la base de données
+DB_USER=nom de l'utilisateur
+DB_PASSWORD=mot de passe
+SERVER_PORT=port du serveur
 ```
 
 * Exécuter la commande suivante pour créer et lancer les conteneurs de la base de données et de l'API nodeJs:

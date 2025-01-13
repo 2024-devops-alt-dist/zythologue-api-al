@@ -5,6 +5,7 @@ dotenv.config()
 import { connectDB, db } from './config/dbConfig';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocs from './config/swaggerConfig'; // Importation de la configuration Swagger
+import cors from 'cors';
 
 import beerRoutes from './routes/beerRoutes';
 import breweryRoutes from './routes/breweryRoutes';
@@ -16,6 +17,10 @@ import reviewRoutes from './routes/reviewRoutes';
 
 const app: Application = express();
 const port = process.env.SERVER_PORT;
+
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
 
 app.use(express.json());
 
