@@ -14,6 +14,7 @@ import categoryRoutes from './routes/categoryRoutes';
 import ingredientRoutes from './routes/ingredientRoutes';
 import beerIngredientRoutes from './routes/beerIngredientRoutes';
 import reviewRoutes from './routes/reviewRoutes';
+import photoRoutes from './routes/photoRoutes';
 
 const app: Application = express();
 const port = process.env.SERVER_PORT;
@@ -32,6 +33,7 @@ app.use('/api', categoryRoutes);
 app.use('/api', ingredientRoutes);
 app.use('/api', beerIngredientRoutes);
 app.use('/api', reviewRoutes);
+app.use('/api', photoRoutes);
 
 connectDB()
     .then(() => {
