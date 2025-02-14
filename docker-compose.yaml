@@ -1,17 +1,4 @@
 services:
-  api:
-    build:
-      context: ./
-    container_name: api_zythologue
-    ports:
-      - "${SERVER_PORT}:3000"
-    depends_on:
-      - db
-    volumes:
-      - ./:/app
-      - /app/node_modules
-    restart: unless-stopped
-
   db:
     image: postgres:latest
     container_name: zytho_postgres_db
@@ -24,6 +11,19 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./db:/docker-entrypoint-initdb.d/
+    restart: unless-stopped
+    
+  api:
+    build:
+      context: ./
+    container_name: api_zythologue
+    ports:
+      - "${SERVER_PORT}:3000"
+    depends_on:
+      - db
+    volumes:
+      - ./:/app
+      - /app/node_modules
     restart: unless-stopped
 
 volumes:

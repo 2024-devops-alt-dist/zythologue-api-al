@@ -4,7 +4,7 @@ dotenv.config()
 
 import { connectDB, db } from './config/dbConfig';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocs from './config/swaggerConfig'; // Importation de la configuration Swagger
+import swaggerDocs from './config/swaggerConfig';
 import cors from 'cors';
 
 import beerRoutes from './routes/beerRoutes';

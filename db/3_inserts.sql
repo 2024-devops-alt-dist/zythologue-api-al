@@ -54,11 +54,10 @@ INSERT INTO category (name, description) VALUES
   ('Belgian Dubbel', 'Bière belge foncée et maltée, aux arômes de fruits secs et caramel.'),
   ('Porter', 'Bière foncée, avec des notes de café, chocolat et malt grillé.'),
   ('Amber Ale', 'Bière de couleur ambrée, au goût légèrement sucré et malté.'),
-  ('Saison', 'Bière belge de fermentation haute, épicée et légèrement fruitée.'),
+  ('Saison', 'Bière rustique de fermentation haute, avec des notes épicées et légèrement acidulées.'),
   ('Bock', 'Bière allemande forte, souvent douce et maltée, au goût riche et rond.'),
   ('Lambic', 'Bière belge fermentée naturellement, souvent fruitée, utilisée pour les gueuzes.'),
   ('Barleywine', 'Bière forte, sucrée, aux arômes de fruits secs et caramel.'),
-  ('Saison', 'Bière rustique de fermentation haute, avec des notes épicées et légèrement acidulées.'),
   ('Cider', 'Boisson fermentée à base de pommes, souvent légère et sucrée.');
 
 INSERT INTO beer (brewery_id, category_id, name, description, abv, ibu) VALUES 
@@ -131,8 +130,8 @@ INSERT INTO photo (beer_id, url) VALUES
   (25, 'beer_21.jpg'),
   (26, 'beer_22.jpg'),
   (27, 'beer_23.jpg'),
-  (28, 'beer_7.jpg'),
-  (29, 'beer_8.jpg'),
+  (28, 'beer_24.jpg'),
+  (29, 'beer_25.jpg'),
   (30, 'beer_9.jpg'),
   (31, 'beer_10.jpg'),
   (32, 'beer_11.jpg'),
