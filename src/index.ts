@@ -20,7 +20,13 @@ const app: Application = express();
 const port = process.env.SERVER_PORT;
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    // origin: [
+    //     'http://localhost:5173', 
+    //     process.env.DATABASE_URL ? process.env.DATABASE_URL : "",
+    //     'https://zythologue-front-14tuvz2kp-adriens-projects-e7311988.vercel.app'
+    // ],
+    // methods: ['GET', 'POST', 'PUT', 'DELETE'], // Ajouter les méthodes appropriées
+    // allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 app.use(express.json());
@@ -39,7 +45,7 @@ connectDB()
     .then(() => {
         console.log("Connexion à PostgreSQL réussie");
         app.listen(port, () => {
-            console.log(`Server is running on http://localhost:${port}`);
+            console.log(`Server is running on port ${port}`);
         });
     })
     .catch((err) => console.error("Erreur de connexion à PostgreSQL", err));

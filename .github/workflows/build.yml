@@ -18,3 +18,7 @@ jobs:
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/zythologue-api .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/zythologue-api
+      
+      - name: Trigger Render Deployment
+        run: |
+          curl -X POST https://api.render.com/deploy/srv-cunkojq3esus73cjpok0?key=0pIbQn88AzM
